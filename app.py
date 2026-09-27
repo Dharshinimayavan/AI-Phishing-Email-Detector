@@ -1,7 +1,8 @@
 from flask import Flask, render_template, request, make_response, redirect, session
 
 import joblib
-import sqlite3
+import os
+import psycopg2
 import re
 
 from datetime import datetime
@@ -23,38 +24,42 @@ model = joblib.load("phishing_model.pkl")
 # CREATE DATABASE
 # ==============================
 
+def get_db_connection():
+    database_url = os.environ.get("DATABASE_URL")
+
+    if not database_url:
+        raise RuntimeError(
+            "DATABASE_URL environment variable is not set."
+        )
+
+    return psycopg2.connect(database_url)
+
+
+# ==============================
+# CREATE DATABASE
+# ==============================
+
 def create_database():
 
-    conn = sqlite3.connect("history.db")
-
+    conn = get_db_connection()
     cursor = conn.cursor()
 
     # Scan history table
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS history (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            id SERIAL PRIMARY KEY,
             result TEXT,
             confidence REAL,
             risk TEXT,
-            timestamp TEXT
+            timestamp TEXT,
+            email TEXT
         )
     """)
-
-    # Add email column if it does not exist
-    try:
-
-        cursor.execute(
-            "ALTER TABLE history ADD COLUMN email TEXT"
-        )
-
-    except sqlite3.OperationalError:
-
-        pass
 
     # Users table
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS users (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            id SERIAL PRIMARY KEY,
             name TEXT NOT NULL,
             email TEXT UNIQUE NOT NULL,
             password TEXT NOT NULL
@@ -62,7 +67,7 @@ def create_database():
     """)
 
     conn.commit()
-
+    cursor.close()
     conn.close()
 
 
@@ -325,16 +330,14 @@ def login():
             ""
         )
 
-        conn = sqlite3.connect(
-            "history.db"
-        )
+        conn = get_db_connection()
 
         cursor = conn.cursor()
 
         cursor.execute("""
             SELECT id, name, email, password
             FROM users
-            WHERE email = ?
+            WHERE email = %s
         """, (email,))
 
         user = cursor.fetchone()
@@ -417,9 +420,7 @@ def register():
                 error=error
             )
 
-        conn = sqlite3.connect(
-            "history.db"
-        )
+        conn = get_db_connection()
 
         cursor = conn.cursor()
 
@@ -427,7 +428,7 @@ def register():
         cursor.execute("""
             SELECT id
             FROM users
-            WHERE email = ?
+            WHERE email = %s
         """, (email,))
 
         existing_user = cursor.fetchone()
@@ -454,7 +455,7 @@ def register():
         cursor.execute("""
             INSERT INTO users
             (name, email, password)
-            VALUES (?, ?, ?)
+            VALUES (%s, %s, %s)
         """, (
             name,
             email,
@@ -529,10 +530,10 @@ def home():
                 [email_text]
             )[0]
 
-            confidence = round(
+            confidence = float(round(
                 max(probabilities) * 100,
                 2
-            )
+            ))
 
             # Result
             if prediction == 1:
@@ -554,22 +555,20 @@ def home():
             )
 
             # Risk score
-            risk_score = calculate_risk_score(
+            risk_score = int(calculate_risk_score(
                 email_text,
                 prediction
-            )
+            ))
 
             # Save scan
-            conn = sqlite3.connect(
-                "history.db"
-            )
+            conn = get_db_connection()
 
             cursor = conn.cursor()
 
             cursor.execute("""
                 INSERT INTO history
                 (email, result, confidence, risk, timestamp)
-                VALUES (?, ?, ?, ?, ?)
+                VALUES (%s, %s, %s, %s, %s)
             """, (
                 email_text,
                 result,
@@ -605,9 +604,7 @@ def history():
 
         return redirect("/login")
 
-    conn = sqlite3.connect(
-        "history.db"
-    )
+    conn = get_db_connection()
 
     cursor = conn.cursor()
 
@@ -676,15 +673,13 @@ def delete_scan(scan_id):
 
         return redirect("/login")
 
-    conn = sqlite3.connect(
-        "history.db"
-    )
+    conn = get_db_connection()
 
     cursor = conn.cursor()
 
     cursor.execute("""
         DELETE FROM history
-        WHERE id = ?
+        WHERE id = %s
     """, (scan_id,))
 
     conn.commit()
@@ -705,9 +700,7 @@ def dashboard():
 
         return redirect("/login")
 
-    conn = sqlite3.connect(
-        "history.db"
-    )
+    conn = get_db_connection()
 
     cursor = conn.cursor()
 
@@ -816,9 +809,7 @@ def reports():
 
         return redirect("/login")
 
-    conn = sqlite3.connect(
-        "history.db"
-    )
+    conn = get_db_connection()
 
     cursor = conn.cursor()
 
@@ -854,9 +845,7 @@ def details(scan_id):
 
         return redirect("/login")
 
-    conn = sqlite3.connect(
-        "history.db"
-    )
+    conn = get_db_connection()
 
     cursor = conn.cursor()
 
@@ -869,7 +858,7 @@ def details(scan_id):
             risk,
             timestamp
         FROM history
-        WHERE id = ?
+        WHERE id = %s
     """, (scan_id,))
 
     record = cursor.fetchone()
@@ -942,9 +931,7 @@ def report(scan_id):
 
         return redirect("/login")
 
-    conn = sqlite3.connect(
-        "history.db"
-    )
+    conn = get_db_connection()
 
     cursor = conn.cursor()
 
@@ -957,7 +944,7 @@ def report(scan_id):
             risk,
             timestamp
         FROM history
-        WHERE id = ?
+        WHERE id = %s
     """, (scan_id,))
 
     record = cursor.fetchone()
@@ -1663,16 +1650,14 @@ def change_password():
     # Get logged-in user
     user_id = session.get("user_id")
 
-    conn = sqlite3.connect(
-        "history.db"
-    )
+    conn = get_db_connection()
 
     cursor = conn.cursor()
 
     cursor.execute("""
         SELECT password
         FROM users
-        WHERE id = ?
+        WHERE id = %s
     """, (user_id,))
 
     user = cursor.fetchone()
@@ -1708,8 +1693,8 @@ def change_password():
     # Update password
     cursor.execute("""
         UPDATE users
-        SET password = ?
-        WHERE id = ?
+        SET password = %s
+        WHERE id = %s
     """, (
         new_hashed_password,
         user_id
