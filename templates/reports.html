@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        PhishGuard Security Report #{{ scan_id }}
+    </title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+
+            background: #f4f7fb;
+            color: #1f2937;
+            line-height: 1.6;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1000px;
+            margin: 40px auto;
+        }
+
+        .report {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow:
+                0 8px 30px rgba(0, 0, 0, 0.08);
+        }
+
+        /* HEADER */
+
+        .header {
+            background: linear-gradient(
+                135deg,
+                #0f172a,
+                #1e3a8a
+            );
+
+            color: white;
+            padding: 35px;
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: 700;
+        }
+
+        .logo span {
+            color: #60a5fa;
+        }
+
+        .report-title {
+            margin-top: 25px;
+        }
+
+        .report-title h1 {
+            font-size: 30px;
+            margin-bottom: 8px;
+        }
+
+        .report-title p {
+            color: #dbeafe;
+            font-size: 15px;
+        }
+
+        /* SUMMARY */
+
+        .summary {
+            padding: 30px;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #111827;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns:
+                repeat(4, 1fr);
+
+            gap: 18px;
+        }
+
+        .summary-card {
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 20px;
+            background: #fafafa;
+        }
+
+        .summary-label {
+            font-size: 13px;
+            color: #6b7280;
+            margin-bottom: 8px;
+        }
+
+        .summary-value {
+            font-size: 20px;
+            font-weight: 700;
+            color: #111827;
+        }
+
+        .phishing {
+            color: #dc2626;
+        }
+
+        .legitimate {
+            color: #16a34a;
+        }
+
+        .high {
+            color: #dc2626;
+        }
+
+        .low {
+            color: #16a34a;
+        }
+
+        /* CONFIDENCE */
+
+        .confidence-section {
+            padding: 0 30px 30px;
+        }
+
+        .confidence-box {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 22px;
+        }
+
+        .confidence-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .confidence-label {
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .confidence-value {
+            font-weight: 700;
+            color: #1d4ed8;
+        }
+
+        .progress {
+            width: 100%;
+            height: 12px;
+            background: #e5e7eb;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: {{ confidence }}%;
+            background: #2563eb;
+            border-radius: 20px;
+        }
+
+        /* RISK */
+
+        .risk-section {
+            padding: 0 30px 30px;
+        }
+
+        .risk-box {
+            border-radius: 12px;
+            padding: 22px;
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+        }
+
+        .risk-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .risk-title {
+            font-weight: 700;
+            color: #991b1b;
+        }
+
+        .risk-score {
+            font-size: 22px;
+            font-weight: 700;
+            color: #dc2626;
+        }
+
+        .risk-progress {
+            width: 100%;
+            height: 12px;
+            background: #fee2e2;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .risk-progress-bar {
+            height: 100%;
+            width: {{ risk_score }}%;
+            background: #dc2626;
+            border-radius: 20px;
+        }
+
+        /* EMAIL */
+
+        .email-section {
+            padding: 0 30px 30px;
+        }
+
+        .email-box {
+            background: #f8fafc;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 22px;
+        }
+
+        .email-box pre {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+
+            font-size: 14px;
+            color: #374151;
+            line-height: 1.7;
+        }
+
+        /* INDICATORS */
+
+        .indicator-section {
+            padding: 0 30px 30px;
+        }
+
+        .indicator {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+
+            padding: 14px 16px;
+            margin-bottom: 10px;
+
+            background: #fff7ed;
+            border: 1px solid #fed7aa;
+            border-radius: 10px;
+
+            color: #9a3412;
+            font-size: 14px;
+        }
+
+        .indicator-icon {
+            font-size: 17px;
+        }
+
+        /* RECOMMENDATION */
+
+        .recommendation-section {
+            padding: 0 30px 30px;
+        }
+
+        .recommendation {
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            border-radius: 12px;
+            padding: 22px;
+        }
+
+        .recommendation h3 {
+            color: #1e40af;
+            margin-bottom: 10px;
+        }
+
+        .recommendation p {
+            color: #374151;
+            font-size: 14px;
+        }
+
+        /* FOOTER */
+
+        .footer {
+            border-top: 1px solid #e5e7eb;
+            padding: 25px 30px;
+            text-align: center;
+            color: #6b7280;
+            font-size: 13px;
+        }
+
+        .footer strong {
+            color: #374151;
+        }
+
+        /* PRINT */
+
+        @media print {
+
+            body {
+                background: white;
+            }
+
+            .container {
+                width: 100%;
+                margin: 0;
+            }
+
+            .report {
+                box-shadow: none;
+                border-radius: 0;
+            }
+
+            .header {
+                print-color-adjust: exact;
+                -webkit-print-color-adjust: exact;
+            }
+
+        }
+
+        /* MOBILE */
+
+        @media (max-width: 800px) {
+
+            .summary-grid {
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+
+        }
+
+        @media (max-width: 550px) {
+
+            .container {
+                width: 95%;
+                margin: 20px auto;
+            }
+
+            .header {
+                padding: 25px 20px;
+            }
+
+            .header-top {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .report-title h1 {
+                font-size: 24px;
+            }
+
+            .summary,
+            .confidence-section,
+            .risk-section,
+            .email-section,
+            .indicator-section,
+            .recommendation-section {
+                padding-left: 20px;
+                padding-right: 20px;
+            }
+
+            .summary-grid {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<div class="container">
+
+    <div class="report">
+
+        <!-- HEADER -->
+
+        <div class="header">
+
+            <div class="header-top">
+
+                <div class="logo">
+                    🛡️ <span>PhishGuard</span>
+                </div>
+
+                <div>
+                    Security Analysis Report
+                </div>
+
+            </div>
+
+            <div class="report-title">
+
+                <h1>
+                    Phishing Email Detection Report
+                </h1>
+
+                <p>
+                    Detailed AI-based security analysis
+                    for Scan #{{ scan_id }}
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- SUMMARY -->
+
+        <div class="summary">
+
+            <div class="section-title">
+                📊 Scan Summary
+            </div>
+
+            <div class="summary-grid">
+
+                <div class="summary-card">
+
+                    <div class="summary-label">
+                        Scan ID
+                    </div>
+
+                    <div class="summary-value">
+                        #{{ scan_id }}
+                    </div>
+
+                </div>
+
+
+                <div class="summary-card">
+
+                    <div class="summary-label">
+                        Detection Result
+                    </div>
+
+                    <div
+                        class="summary-value
+                        {% if result == 'Phishing Email' %}
+                        phishing
+                        {% else %}
+                        legitimate
+                        {% endif %}"
+                    >
+
+                        {% if result == "Phishing Email" %}
+                            ⚠️ Phishing Email
+                        {% else %}
+                            ✅ Legitimate Email
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+
+                <div class="summary-card">
+
+                    <div class="summary-label">
+                        Risk Level
+                    </div>
+
+                    <div
+                        class="summary-value
+                        {% if risk == 'HIGH' %}
+                        high
+                        {% else %}
+                        low
+                        {% endif %}"
+                    >
+
+                        {% if risk == "HIGH" %}
+                            🔴 HIGH
+                        {% else %}
+                            🟢 LOW
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+
+                <div class="summary-card">
+
+                    <div class="summary-label">
+                        Scan Date & Time
+                    </div>
+
+                    <div class="summary-value">
+                        {{ timestamp }}
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- CONFIDENCE -->
+
+        <div class="confidence-section">
+
+            <div class="section-title">
+                🎯 Model Confidence
+            </div>
+
+            <div class="confidence-box">
+
+                <div class="confidence-header">
+
+                    <span class="confidence-label">
+                        Prediction Confidence
+                    </span>
+
+                    <span class="confidence-value">
+                        {{ confidence }}%
+                    </span>
+
+                </div>
+
+                <div class="progress">
+
+                    <div
+                        class="progress-bar"
+                    ></div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- RISK SCORE -->
+
+        <div class="risk-section">
+
+            <div class="section-title">
+                ⚠️ Risk Assessment
+            </div>
+
+            <div class="risk-box">
+
+                <div class="risk-header">
+
+                    <span class="risk-title">
+                        Overall Risk Score
+                    </span>
+
+                    <span class="risk-score">
+                        {{ risk_score }}/100
+                    </span>
+
+                </div>
+
+                <div class="risk-progress">
+
+                    <div
+                        class="risk-progress-bar"
+                    ></div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- EMAIL -->
+
+        <div class="email-section">
+
+            <div class="section-title">
+                📧 Scanned Email
+            </div>
+
+            <div class="email-box">
+
+                <pre>{{ email }}</pre>
+
+            </div>
+
+        </div>
+
+
+        <!-- INDICATORS -->
+
+        <div class="indicator-section">
+
+            <div class="section-title">
+                🚨 Detection Indicators
+            </div>
+
+            {% for reason in reasons %}
+
+                <div class="indicator">
+
+                    <span class="indicator-icon">
+                        ⚠️
+                    </span>
+
+                    <span>
+                        {{ reason }}
+                    </span>
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+
+        <!-- RECOMMENDATION -->
+
+        <div class="recommendation-section">
+
+            <div class="section-title">
+                🔐 Security Recommendation
+            </div>
+
+            <div class="recommendation">
+
+                {% if result == "Phishing Email" %}
+
+                    <h3>
+                        ⚠️ Do Not Interact With This Email
+                    </h3>
+
+                    <p>
+                        This email has been classified as
+                        potentially phishing. Do not click
+                        links, download attachments, provide
+                        passwords, OTPs, banking information,
+                        or other sensitive information.
+                    </p>
+
+                {% else %}
+
+                    <h3>
+                        ✅ No Major Phishing Indicators
+                    </h3>
+
+                    <p>
+                        The email has been classified as
+                        legitimate by the PhishGuard detection
+                        model. However, users should still
+                        verify unexpected requests before
+                        sharing sensitive information.
+                    </p>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+
+        <!-- FOOTER -->
+
+        <div class="footer">
+
+            <p>
+                <strong>PhishGuard</strong>
+                — AI-Based Phishing Email Detector
+            </p>
+
+            <p>
+                Automated security analysis report
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>

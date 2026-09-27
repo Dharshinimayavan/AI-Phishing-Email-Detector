@@ -1,0 +1,1144 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Dashboard | PhishGuard</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f4f7fb;
+            color: #1e293b;
+        }
+
+
+        /* =========================
+           NAVBAR
+        ========================= */
+
+        .navbar {
+            background: white;
+            padding: 18px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #e2e8f0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: 700;
+            color: #2563eb;
+        }
+
+        .logo span {
+            color: #0f172a;
+        }
+
+        .navbar-right {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 25px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #475569;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .nav-links a:hover {
+            color: #2563eb;
+        }
+
+        .nav-links .active {
+            color: #2563eb;
+        }
+
+
+        /* =========================
+           USER AREA
+        ========================= */
+
+        .user-area {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .user-name {
+            color: #334155;
+            font-size: 13px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .logout-button {
+            text-decoration: none;
+            padding: 8px 14px;
+            border-radius: 7px;
+            background: #eff6ff;
+            color: #2563eb;
+            border: 1px solid #bfdbfe;
+            font-size: 13px;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+
+        .logout-button:hover {
+            background: #2563eb;
+            color: white;
+        }
+
+
+        /* =========================
+           MAIN
+        ========================= */
+
+        .container {
+            width: 86%;
+            max-width: 1250px;
+            margin: 40px auto;
+        }
+
+        .page-header {
+            margin-bottom: 30px;
+        }
+
+        .page-header h1 {
+            font-size: 30px;
+            color: #0f172a;
+            margin-bottom: 8px;
+        }
+
+        .page-header p {
+            color: #64748b;
+            font-size: 15px;
+        }
+
+
+        /* =========================
+           STAT CARDS
+        ========================= */
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 23px;
+            border-radius: 14px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 15px rgba(15, 23, 42, 0.05);
+            transition: 0.2s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 22px rgba(15, 23, 42, 0.08);
+        }
+
+        .stat-icon {
+            font-size: 25px;
+            margin-bottom: 12px;
+        }
+
+        .stat-title {
+            color: #64748b;
+            font-size: 13px;
+            margin-bottom: 8px;
+        }
+
+        .stat-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        .phishing-value {
+            color: #dc2626;
+        }
+
+        .legitimate-value {
+            color: #16a34a;
+        }
+
+        .confidence-value {
+            color: #2563eb;
+        }
+
+
+        /* =========================
+           CONTENT GRID
+        ========================= */
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            margin-bottom: 25px;
+        }
+
+        .dashboard-card {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 14px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(15, 23, 42, 0.05);
+        }
+
+        .dashboard-card h2 {
+            font-size: 19px;
+            color: #0f172a;
+            margin-bottom: 8px;
+        }
+
+        .dashboard-card p {
+            color: #64748b;
+            font-size: 13px;
+        }
+
+
+        /* =========================
+           DISTRIBUTION
+        ========================= */
+
+        .distribution {
+            margin-top: 25px;
+        }
+
+        .distribution-row {
+            margin-bottom: 22px;
+        }
+
+        .distribution-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .progress {
+            width: 100%;
+            height: 12px;
+            background: #e2e8f0;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            border-radius: 20px;
+            transition: width 0.8s ease;
+        }
+
+        .phishing-bar {
+            background: #dc2626;
+            width: {{ phishing_percentage }}%;
+        }
+
+        .legitimate-bar {
+            background: #16a34a;
+            width: {{ legitimate_percentage }}%;
+        }
+
+
+        /* =========================
+           SUMMARY
+        ========================= */
+
+        .summary-box {
+            margin-top: 20px;
+            padding: 18px;
+            border-radius: 10px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+        }
+
+        .summary-title {
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #0f172a;
+        }
+
+        .summary-text {
+            line-height: 1.6;
+            color: #64748b;
+            font-size: 14px;
+        }
+
+
+        /* =========================
+           SECURITY STATUS
+        ========================= */
+
+        .status {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: 20px;
+            padding: 16px;
+            border-radius: 10px;
+            background: #ecfdf5;
+            border: 1px solid #bbf7d0;
+        }
+
+        .status-icon {
+            font-size: 25px;
+        }
+
+        .status h3 {
+            color: #166534;
+            font-size: 15px;
+            margin-bottom: 4px;
+        }
+
+        .status p {
+            color: #15803d;
+            font-size: 13px;
+        }
+
+
+        /* =========================
+           RECENT SCANS
+        ========================= */
+
+        .recent-section {
+            margin-bottom: 25px;
+        }
+
+        .recent-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .view-history {
+            text-decoration: none;
+            color: #2563eb;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .view-history:hover {
+            text-decoration: underline;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin-top: 20px;
+        }
+
+        .scan-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 650px;
+        }
+
+        .scan-table th {
+            text-align: left;
+            padding: 13px 12px;
+            background: #f8fafc;
+            color: #64748b;
+            font-size: 12px;
+            font-weight: 700;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .scan-table td {
+            padding: 15px 12px;
+            font-size: 13px;
+            color: #334155;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .scan-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .scan-table tr:hover td {
+            background: #f8fafc;
+        }
+
+        .scan-id {
+            font-weight: 700;
+            color: #2563eb;
+        }
+
+        .result-badge {
+            display: inline-block;
+            padding: 6px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .phishing-badge {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+
+        .legitimate-badge {
+            background: #dcfce7;
+            color: #15803d;
+        }
+
+        .risk-high {
+            color: #dc2626;
+            font-weight: 700;
+        }
+
+        .risk-low {
+            color: #16a34a;
+            font-weight: 700;
+        }
+
+        .view-btn {
+            display: inline-block;
+            padding: 6px 10px;
+            background: #eff6ff;
+            color: #2563eb;
+            text-decoration: none;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .view-btn:hover {
+            background: #2563eb;
+            color: white;
+        }
+
+        .empty-scans {
+            text-align: center;
+            padding: 35px 20px;
+            color: #64748b;
+        }
+
+        .empty-icon {
+            font-size: 35px;
+            margin-bottom: 10px;
+        }
+
+
+        /* =========================
+           QUICK ACTIONS
+        ========================= */
+
+        .actions {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 22px;
+        }
+
+        .action-btn {
+            display: block;
+            text-align: center;
+            text-decoration: none;
+            padding: 13px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            opacity: 0.9;
+        }
+
+        .scan-btn {
+            background: #2563eb;
+            color: white;
+        }
+
+        .history-btn {
+            background: #0f172a;
+            color: white;
+        }
+
+        .report-btn {
+            background: #16a34a;
+            color: white;
+        }
+
+
+        /* =========================
+           FOOTER
+        ========================= */
+
+        footer {
+            text-align: center;
+            padding: 30px 20px;
+            color: #64748b;
+            font-size: 13px;
+        }
+
+
+        /* =========================
+           RESPONSIVE
+        ========================= */
+
+        @media (max-width: 1100px) {
+
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+        }
+
+
+        @media (max-width: 900px) {
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .navbar-right {
+                gap: 15px;
+            }
+
+            .nav-links {
+                gap: 15px;
+            }
+
+        }
+
+
+        @media (max-width: 650px) {
+
+            .navbar {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .navbar-right {
+                width: 100%;
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+
+            .nav-links {
+                gap: 12px;
+            }
+
+            .user-area {
+                gap: 8px;
+            }
+
+            .container {
+                width: 92%;
+                margin: 30px auto;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .actions {
+                grid-template-columns: 1fr;
+            }
+
+            .page-header h1 {
+                font-size: 24px;
+            }
+
+            .dashboard-card {
+                padding: 20px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- =========================
+         NAVBAR
+    ========================= -->
+
+    <nav class="navbar">
+
+        <div class="logo">
+            🛡️ Phish<span>Guard</span>
+        </div>
+
+
+        <div class="navbar-right">
+
+            <div class="nav-links">
+
+                <a href="/">
+                    🏠 Detector
+                </a>
+
+                <a href="/history">
+                    📋 History
+                </a>
+
+                <a href="/dashboard" class="active">
+                    📊 Dashboard
+                </a>
+
+            </div>
+
+
+            <div class="user-area">
+
+                <span class="user-name">
+                    👤 {{ session.get("user_name", "User") }}
+                </span>
+
+                <a href="/logout" class="logout-button">
+                    🚪 Logout
+                </a>
+
+            </div>
+
+        </div>
+
+    </nav>
+
+
+    <!-- =========================
+         MAIN
+    ========================= -->
+
+    <main class="container">
+
+
+        <!-- PAGE HEADER -->
+
+        <div class="page-header">
+
+            <h1>
+                📊 Security Dashboard
+            </h1>
+
+            <p>
+                Overview of email scanning and phishing detection activity.
+            </p>
+
+        </div>
+
+
+        <!-- =========================
+             STATISTICS
+        ========================= -->
+
+        <div class="stats">
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    📧
+                </div>
+
+                <div class="stat-title">
+                    Total Scans
+                </div>
+
+                <div class="stat-value">
+                    {{ total_scans }}
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    ⚠️
+                </div>
+
+                <div class="stat-title">
+                    Phishing Detected
+                </div>
+
+                <div class="stat-value phishing-value">
+                    {{ phishing_count }}
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    ✅
+                </div>
+
+                <div class="stat-title">
+                    Legitimate Emails
+                </div>
+
+                <div class="stat-value legitimate-value">
+                    {{ legitimate_count }}
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    🎯
+                </div>
+
+                <div class="stat-title">
+                    Average Confidence
+                </div>
+
+                <div class="stat-value confidence-value">
+                    {{ average_confidence }}%
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+        <!-- =========================
+             DASHBOARD CONTENT
+        ========================= -->
+
+        <div class="dashboard-grid">
+
+
+            <!-- EMAIL DISTRIBUTION -->
+
+            <div class="dashboard-card">
+
+                <h2>
+                    📈 Email Classification
+                </h2>
+
+                <p>
+                    Distribution of analyzed emails.
+                </p>
+
+
+                <div class="distribution">
+
+
+                    <div class="distribution-row">
+
+                        <div class="distribution-header">
+
+                            <span>
+                                ⚠️ Phishing
+                            </span>
+
+                            <span>
+                                {{ phishing_percentage }}%
+                            </span>
+
+                        </div>
+
+
+                        <div class="progress">
+
+                            <div
+                                class="progress-bar phishing-bar"
+                            ></div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="distribution-row">
+
+                        <div class="distribution-header">
+
+                            <span>
+                                ✅ Legitimate
+                            </span>
+
+                            <span>
+                                {{ legitimate_percentage }}%
+                            </span>
+
+                        </div>
+
+
+                        <div class="progress">
+
+                            <div
+                                class="progress-bar legitimate-bar"
+                            ></div>
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+
+            <!-- SECURITY SUMMARY -->
+
+            <div class="dashboard-card">
+
+                <h2>
+                    🛡️ Security Summary
+                </h2>
+
+                <p>
+                    Current scanning activity overview.
+                </p>
+
+
+                <div class="summary-box">
+
+                    <div class="summary-title">
+                        Scan Activity
+                    </div>
+
+                    <div class="summary-text">
+
+                        PhishGuard has analyzed
+
+                        <strong>
+                            {{ total_scans }}
+                        </strong>
+
+                        email(s).
+
+                        Among them,
+
+                        <strong>
+                            {{ phishing_count }}
+                        </strong>
+
+                        were classified as phishing and
+
+                        <strong>
+                            {{ legitimate_count }}
+                        </strong>
+
+                        were classified as legitimate.
+
+                    </div>
+
+                </div>
+
+
+                <div class="status">
+
+                    <div class="status-icon">
+                        🛡️
+                    </div>
+
+                    <div>
+
+                        <h3>
+                            PhishGuard Protection Active
+                        </h3>
+
+                        <p>
+                            AI-powered email security analysis is available.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+        <!-- =========================
+             RECENT SCAN ACTIVITY
+        ========================= -->
+
+        <div class="dashboard-card recent-section">
+
+
+            <div class="recent-header">
+
+                <div>
+
+                    <h2>
+                        🕒 Recent Scan Activity
+                    </h2>
+
+                    <p>
+                        Latest email analysis performed by PhishGuard.
+                    </p>
+
+                </div>
+
+
+                <a
+                    href="/history"
+                    class="view-history"
+                >
+                    View All →
+                </a>
+
+            </div>
+
+
+            {% if recent_scans %}
+
+
+            <div class="table-container">
+
+                <table class="scan-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Scan ID
+                            </th>
+
+                            <th>
+                                Result
+                            </th>
+
+                            <th>
+                                Confidence
+                            </th>
+
+                            <th>
+                                Risk
+                            </th>
+
+                            <th>
+                                Date & Time
+                            </th>
+
+                            <th>
+                                Action
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+
+                        {% for scan in recent_scans %}
+
+                        <tr>
+
+
+                            <td>
+
+                                <span class="scan-id">
+                                    #{{ scan[0] }}
+                                </span>
+
+                            </td>
+
+
+                            <td>
+
+                                {% if scan[1] == "Phishing Email" %}
+
+                                    <span class="result-badge phishing-badge">
+                                        ⚠️ Phishing
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="result-badge legitimate-badge">
+                                        ✅ Legitimate
+                                    </span>
+
+                                {% endif %}
+
+                            </td>
+
+
+                            <td>
+
+                                {{ scan[2] }}%
+
+                            </td>
+
+
+                            <td>
+
+                                {% if scan[3] == "HIGH" %}
+
+                                    <span class="risk-high">
+                                        HIGH
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="risk-low">
+                                        LOW
+                                    </span>
+
+                                {% endif %}
+
+                            </td>
+
+
+                            <td>
+
+                                {{ scan[4] }}
+
+                            </td>
+
+
+                            <td>
+
+                                <a
+                                    href="/details/{{ scan[0] }}"
+                                    class="view-btn"
+                                >
+                                    View
+                                </a>
+
+                            </td>
+
+
+                        </tr>
+
+                        {% endfor %}
+
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+            {% else %}
+
+
+            <div class="empty-scans">
+
+                <div class="empty-icon">
+                    📭
+                </div>
+
+                <strong>
+                    No scans yet
+                </strong>
+
+                <p style="margin-top: 7px;">
+                    Start by scanning an email from the Detector page.
+                </p>
+
+            </div>
+
+
+            {% endif %}
+
+
+        </div>
+
+
+        <!-- =========================
+             QUICK ACTIONS
+        ========================= -->
+
+        <div class="dashboard-card">
+
+            <h2>
+                ⚡ Quick Actions
+            </h2>
+
+            <p>
+                Access the main PhishGuard features.
+            </p>
+
+
+            <div class="actions">
+
+
+                <a
+                    href="/"
+                    class="action-btn scan-btn"
+                >
+                    🔍 Scan New Email
+                </a>
+
+
+                <a
+                    href="/history"
+                    class="action-btn history-btn"
+                >
+                    📋 View Scan History
+                </a>
+
+
+                <a
+                    href="/reports"
+                    class="action-btn report-btn"
+                >
+                    📄 View Reports
+                </a>
+
+
+            </div>
+
+        </div>
+
+
+    </main>
+
+
+    <!-- =========================
+         FOOTER
+    ========================= -->
+
+    <footer>
+
+        AI-Based Phishing Email Detector |
+        PhishGuard
+
+    </footer>
+
+
+</body>
+
+</html>
