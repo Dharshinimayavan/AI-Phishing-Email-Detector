@@ -1,10 +1,10 @@
-
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PhishGuard Security Report #{{ scan_id }}</title>
+    <title>PhishGuard - Security Reports</title>
 
     <style>
         * {
@@ -13,30 +13,17 @@
             padding: 0;
         }
 
-        :root {
-            --bg: #050b18;
-            --panel: #0b162b;
-            --card: #101e35;
-            --border: #203653;
-            --text: #e5efff;
-            --muted: #91a5c2;
-            --blue: #3b82f6;
-            --red: #fb5364;
-            --green: #34d399;
-        }
-
         body {
             font-family: Arial, Helvetica, sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            line-height: 1.6;
+            background: #050b18;
+            color: #e5efff;
             min-height: 100vh;
         }
 
-        .topbar {
+        .navbar {
+            padding: 18px 5%;
             background: #081225;
-            border-bottom: 1px solid var(--border);
-            padding: 16px 5%;
+            border-bottom: 1px solid #203653;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -46,7 +33,7 @@
 
         .logo {
             font-size: 25px;
-            font-weight: 800;
+            font-weight: bold;
             color: white;
         }
 
@@ -54,7 +41,7 @@
             color: #60a5fa;
         }
 
-        .actions {
+        .nav-links {
             display: flex;
             gap: 10px;
             flex-wrap: wrap;
@@ -63,348 +50,225 @@
         .btn {
             display: inline-block;
             padding: 10px 15px;
+            border-radius: 8px;
             border: 1px solid #294363;
-            border-radius: 9px;
             background: #101f38;
             color: #e5efff;
             text-decoration: none;
             font-size: 13px;
-            font-weight: 700;
-            cursor: pointer;
-            font-family: inherit;
+            font-weight: bold;
         }
 
         .btn:hover {
-            border-color: #60a5fa;
             background: #172d4d;
-        }
-
-        .btn-primary {
-            background: #2563eb;
-            border-color: #2563eb;
-            color: white;
+            border-color: #60a5fa;
         }
 
         .container {
             width: 92%;
-            max-width: 1100px;
-            margin: 32px auto;
+            max-width: 1200px;
+            margin: 35px auto;
         }
 
-        .page-heading {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-            gap: 15px;
-            flex-wrap: wrap;
-            margin-bottom: 22px;
+        .heading {
+            margin-bottom: 25px;
         }
 
         .eyebrow {
             color: #60a5fa;
             font-size: 12px;
-            font-weight: 800;
+            font-weight: bold;
             letter-spacing: 1.5px;
             text-transform: uppercase;
         }
 
         h1 {
-            font-size: clamp(25px, 4vw, 34px);
-            margin: 5px 0;
+            margin: 8px 0;
+            font-size: clamp(26px, 4vw, 35px);
         }
 
-        .muted {
-            color: var(--muted);
-            font-size: 13px;
-        }
-
-        .hero {
-            padding: 30px;
-            border-radius: 16px;
-            border: 1px solid #234675;
-            background:
-                radial-gradient(ellipse at top right, #17386a55, transparent 60%),
-                linear-gradient(135deg, #0b1e3c, #0b162b);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 20px;
-            flex-wrap: wrap;
-            margin-bottom: 22px;
-        }
-
-        .hero-label {
-            color: #93c5fd;
-            text-transform: uppercase;
-            font-size: 12px;
-            font-weight: 800;
-            letter-spacing: 1.2px;
-            margin-bottom: 8px;
-        }
-
-        .hero h2 {
-            font-size: clamp(23px, 4vw, 31px);
-            margin-bottom: 8px;
-        }
-
-        .hero-description {
-            color: #afc5e5;
+        .subtitle {
+            color: #91a5c2;
             font-size: 14px;
         }
 
-        .scan-id {
-            background: #08162b;
-            border: 1px solid #294363;
-            border-radius: 12px;
-            padding: 15px 20px;
-            min-width: 135px;
-        }
-
-        .scan-id small {
-            display: block;
-            color: var(--muted);
-            font-size: 12px;
-        }
-
-        .scan-id strong {
-            font-size: 25px;
-            color: white;
-        }
-
-        .section {
-            margin-bottom: 22px;
-        }
-
-        .card {
-            background: var(--panel);
-            border: 1px solid var(--border);
-            border-radius: 15px;
-            padding: 23px;
-            min-width: 0;
-            box-shadow: 0 8px 25px #00000012;
-        }
-
-        .card-heading {
-            font-size: 18px;
-            font-weight: 750;
-            margin-bottom: 4px;
-        }
-
-        .card-subtitle {
-            font-size: 13px;
-            color: var(--muted);
-            margin-bottom: 20px;
-        }
-
-        .summary-grid {
+        .summary {
             display: grid;
-            grid-template-columns: repeat(4, minmax(0, 1fr));
+            grid-template-columns: repeat(3, minmax(0, 1fr));
             gap: 15px;
-            margin-bottom: 22px;
+            margin-bottom: 25px;
         }
 
         .summary-card {
-            background: linear-gradient(145deg, #12223c, #0c192e);
-            border: 1px solid var(--border);
+            padding: 20px;
+            background: #0b162b;
+            border: 1px solid #203653;
             border-radius: 12px;
-            padding: 18px;
-            min-width: 0;
-            transition: border-color .2s, transform .2s;
-        }
-
-        .summary-card:hover {
-            border-color: #3b82f6;
-            transform: translateY(-2px);
         }
 
         .summary-label {
-            color: var(--muted);
-            font-size: 12px;
-            margin-bottom: 8px;
+            color: #91a5c2;
+            font-size: 13px;
+            margin-bottom: 10px;
         }
 
         .summary-value {
-            font-size: 17px;
-            font-weight: 800;
-            overflow-wrap: anywhere;
+            font-size: 25px;
+            font-weight: bold;
         }
 
-        .phishing, .high {
-            color: var(--red);
+        .red {
+            color: #fb5364;
         }
 
-        .legitimate, .low {
-            color: var(--green);
+        .green {
+            color: #34d399;
         }
 
-        .pill {
+        .blue {
+            color: #60a5fa;
+        }
+
+        .panel {
+            background: #0b162b;
+            border: 1px solid #203653;
+            border-radius: 14px;
+            padding: 22px;
+            margin-bottom: 25px;
+        }
+
+        .panel h2 {
+            font-size: 20px;
+            margin-bottom: 7px;
+        }
+
+        .panel-subtitle {
+            color: #91a5c2;
+            font-size: 13px;
+            margin-bottom: 20px;
+        }
+
+        .table-wrapper {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 700px;
+        }
+
+        th {
+            background: #101f38;
+            color: #a9c5e8;
+            text-align: left;
+            padding: 14px 12px;
+            font-size: 12px;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+
+        td {
+            padding: 15px 12px;
+            border-bottom: 1px solid #203653;
+            font-size: 13px;
+            vertical-align: middle;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tbody tr:hover {
+            background: #101f38;
+        }
+
+        .badge {
             display: inline-block;
-            margin-top: 10px;
-            padding: 5px 11px;
-            border-radius: 30px;
+            padding: 6px 10px;
+            border-radius: 20px;
             font-size: 11px;
-            font-weight: 800;
+            font-weight: bold;
+            white-space: nowrap;
         }
 
-        .pill-high {
-            color: #fda4af;
+        .badge-danger {
             background: #7f1d2d55;
+            color: #fda4af;
             border: 1px solid #a92c43;
         }
 
-        .pill-low {
-            color: #6ee7b7;
+        .badge-success {
             background: #064e3b55;
+            color: #6ee7b7;
             border: 1px solid #147d5b;
         }
 
-        .metrics-grid {
-            display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 18px;
-            margin-bottom: 22px;
-        }
-
-        .confidence-card {
-            border-color: #174b80;
-        }
-
-        .risk-card {
-            border-color: #71303d;
-            background: #171322;
-        }
-
-        .metric-row {
+        .confidence-wrapper {
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            gap: 12px;
-            flex-wrap: wrap;
-            margin-bottom: 12px;
+            gap: 9px;
+            min-width: 120px;
         }
 
-        .metric-label {
-            color: #c4d4ea;
-            font-size: 13px;
-            font-weight: 600;
-        }
-
-        .metric-value {
-            color: #60a5fa;
-            font-size: 22px;
-            font-weight: 800;
-        }
-
-        .risk-value {
-            color: var(--red);
-        }
-
-        .track {
-            height: 11px;
-            width: 100%;
+        .confidence-track {
+            width: 65px;
+            height: 7px;
             background: #23334d;
-            border-radius: 30px;
+            border-radius: 10px;
             overflow: hidden;
         }
 
-        .bar {
-            height: 100%;
-            border-radius: 30px;
-        }
-
         .confidence-bar {
-            width: {{ [[confidence|float, 0]|max, 100]|min }}%;
+            height: 100%;
             background: linear-gradient(90deg, #38bdf8, #3b82f6);
-        }
-
-        .risk-track {
-            background: #492530;
-        }
-
-        .risk-bar {
-            width: {{ [[risk_score|float, 0]|max, 100]|min }}%;
-            background: linear-gradient(90deg, #fb923c, #f43f5e);
-        }
-
-        .email-box {
-            background: #071326;
-            border: 1px solid #243d5c;
-            border-radius: 11px;
-            padding: 20px;
-            color: #c9d8ee;
-            font-size: 14px;
-            line-height: 1.8;
-            white-space: pre-wrap;
-            overflow-wrap: anywhere;
-            max-height: 400px;
-            overflow-y: auto;
-        }
-
-        .indicators {
-            display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 12px;
-        }
-
-        .indicator {
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
-            padding: 15px;
             border-radius: 10px;
-            background: #211d19;
-            border: 1px solid #65451e;
-            color: #fbbf70;
+        }
+
+        .view-btn {
+            display: inline-block;
+            padding: 7px 11px;
+            border-radius: 7px;
+            background: #1d4ed8;
+            color: white;
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        .view-btn:hover {
+            background: #2563eb;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 45px 20px;
+        }
+
+        .empty-icon {
+            font-size: 42px;
+            margin-bottom: 12px;
+        }
+
+        .empty h3 {
+            margin-bottom: 10px;
+        }
+
+        .empty p {
+            color: #91a5c2;
             font-size: 14px;
-            overflow-wrap: anywhere;
-        }
-
-        .indicator-icon {
-            flex-shrink: 0;
-        }
-
-        .empty-indicator {
-            padding: 17px;
-            border: 1px solid #147d5b;
-            border-radius: 10px;
-            background: #064e3b30;
-            color: #6ee7b7;
-            font-size: 14px;
-        }
-
-        .recommendation {
-            padding: 22px;
-            border-radius: 12px;
-            background: #0c203b;
-            border: 1px solid #24558c;
-        }
-
-        .recommendation.danger {
-            background: #21131f;
-            border-color: #a92c43;
-        }
-
-        .recommendation h3 {
-            font-size: 17px;
-            margin-bottom: 8px;
-            color: #60a5fa;
-        }
-
-        .recommendation.danger h3 {
-            color: #fb7185;
-        }
-
-        .recommendation p {
-            color: #c2d1e7;
-            font-size: 14px;
+            margin-bottom: 20px;
         }
 
         .footer {
-            border-top: 1px solid var(--border);
-            padding: 24px;
             text-align: center;
+            padding: 25px;
+            margin-top: 40px;
             background: #081225;
-            color: var(--muted);
+            border-top: 1px solid #203653;
+            color: #91a5c2;
             font-size: 12px;
         }
 
@@ -412,15 +276,9 @@
             color: #60a5fa;
         }
 
-        @media (max-width: 850px) {
-            .summary-grid {
-                grid-template-columns: repeat(2, minmax(0, 1fr));
-            }
-        }
-
-        @media (max-width: 600px) {
-            .topbar {
-                padding: 16px 5%;
+        @media (max-width: 700px) {
+            .summary {
+                grid-template-columns: 1fr;
             }
 
             .container {
@@ -428,63 +286,12 @@
                 margin: 22px auto;
             }
 
-            .metrics-grid,
-            .indicators {
-                grid-template-columns: 1fr;
-            }
-
-            .hero, .card {
-                padding: 19px;
-            }
-
-            .scan-id {
-                width: 100%;
-            }
-
-            .summary-card {
+            .panel {
                 padding: 15px;
             }
 
-            .summary-value {
-                font-size: 15px;
-            }
-
-            .actions {
-                width: 100%;
-            }
-
-            .btn {
-                flex: 1;
-                text-align: center;
-            }
-        }
-
-        @media print {
-            body {
-                background: white;
-                color: #111827;
-            }
-
-            .topbar {
-                display: none;
-            }
-
-            .container {
-                width: 100%;
-                max-width: none;
-                margin: 0;
-            }
-
-            .hero, .card, .summary-card,
-            .email-box, .recommendation, .footer {
-                print-color-adjust: exact;
-                -webkit-print-color-adjust: exact;
-                break-inside: avoid;
-            }
-
-            .email-box {
-                max-height: none;
-                overflow: visible;
+            .navbar {
+                padding: 16px 5%;
             }
         }
     </style>
@@ -492,179 +299,145 @@
 
 <body>
 
-<header class="topbar">
+<header class="navbar">
     <div class="logo">🛡️ Phish<span>Guard</span></div>
 
-    <nav class="actions">
-        <a class="btn" href="/reports">← Back to Reports</a>
-        <button class="btn" type="button" onclick="window.print()">
-            Print Report
-        </button>
-        <a class="btn btn-primary" href="/report/{{ scan_id }}">
-            ↓ Download Report
-        </a>
+    <nav class="nav-links">
+        <a href="/dashboard" class="btn">Dashboard</a>
+        <a href="/history" class="btn">Scan History</a>
+        <a href="/settings" class="btn">Settings</a>
     </nav>
 </header>
 
 <main class="container">
 
-    <div class="page-heading">
-        <div>
-            <div class="eyebrow">Security Center / Scan Details</div>
-            <h1>Security Analysis Report</h1>
-            <p class="muted">AI-powered email security assessment</p>
-        </div>
-        <div class="muted">🕒 {{ timestamp }}</div>
-    </div>
-
-    <section class="hero">
-        <div>
-            <div class="hero-label">🛡️ Security Analysis Report</div>
-            <h2>Phishing Email Detection</h2>
-            <p class="hero-description">
-                Detailed AI-based analysis for Scan #{{ scan_id }}
-            </p>
-
-            <span class="pill
-                {% if risk == 'HIGH' %}pill-high{% else %}pill-low{% endif %}">
-                {% if risk == 'HIGH' %}● HIGH RISK{% else %}● LOW RISK{% endif %}
-            </span>
-        </div>
-
-        <div class="scan-id">
-            <small>Scan Reference</small>
-            <strong>#{{ scan_id }}</strong>
-        </div>
-    </section>
-
-    <section class="section">
-        <h2 class="card-heading" style="margin-bottom:15px;">
-            📊 Scan Summary
-        </h2>
-
-        <div class="summary-grid">
-            <div class="summary-card">
-                <div class="summary-label">Scan ID</div>
-                <div class="summary-value">#{{ scan_id }}</div>
-            </div>
-
-            <div class="summary-card">
-                <div class="summary-label">Detection Result</div>
-                <div class="summary-value {% if result == 'Phishing Email' %}phishing{% else %}legitimate{% endif %}">
-                    {% if result == 'Phishing Email' %}
-                        ⚠ Phishing Email
-                    {% else %}
-                        ✓ Legitimate Email
-                    {% endif %}
-                </div>
-            </div>
-
-            <div class="summary-card">
-                <div class="summary-label">Risk Level</div>
-                <div class="summary-value {% if risk == 'HIGH' %}high{% else %}low{% endif %}">
-                    {% if risk == 'HIGH' %}🔴 HIGH{% else %}🟢 LOW{% endif %}
-                </div>
-            </div>
-
-            <div class="summary-card">
-                <div class="summary-label">Scan Date &amp; Time</div>
-                <div class="summary-value">{{ timestamp }}</div>
-            </div>
-        </div>
-    </section>
-
-    <section class="metrics-grid">
-        <div class="card confidence-card">
-            <h2 class="card-heading">🎯 Model Confidence</h2>
-            <p class="card-subtitle">Confidence reported by the AI model</p>
-
-            <div class="metric-row">
-                <span class="metric-label">Prediction Confidence</span>
-                <span class="metric-value">{{ confidence }}%</span>
-            </div>
-
-            <div class="track">
-                <div class="bar confidence-bar"></div>
-            </div>
-        </div>
-
-        <div class="card risk-card">
-            <h2 class="card-heading">⚠️ Risk Assessment</h2>
-            <p class="card-subtitle">Risk score calculated by PhishGuard</p>
-
-            <div class="metric-row">
-                <span class="metric-label">Overall Risk Score</span>
-                <span class="metric-value risk-value">{{ risk_score }}/100</span>
-            </div>
-
-            <div class="track risk-track">
-                <div class="bar risk-bar"></div>
-            </div>
-        </div>
-    </section>
-
-    <section class="card section">
-        <h2 class="card-heading">📧 Scanned Email</h2>
-        <p class="card-subtitle">Email content submitted for analysis</p>
-        <div class="email-box">{{ email }}</div>
-    </section>
-
-    <section class="card section">
-        <h2 class="card-heading">🚨 Detection Indicators</h2>
-        <p class="card-subtitle">Potential signals identified during the scan</p>
-
-        {% if reasons %}
-            <div class="indicators">
-                {% for reason in reasons %}
-                    <div class="indicator">
-                        <span class="indicator-icon">⚠️</span>
-                        <span>{{ reason }}</span>
-                    </div>
-                {% endfor %}
-            </div>
-        {% else %}
-            <div class="empty-indicator">
-                ✓ No specific indicators were recorded for this scan.
-            </div>
-        {% endif %}
-    </section>
-
-    <section class="card section">
-        <h2 class="card-heading">🔐 Security Recommendation</h2>
-        <p class="card-subtitle">Suggested next steps based on the classification</p>
-
-        {% if result == 'Phishing Email' %}
-            <div class="recommendation danger">
-                <h3>⚠️ Do Not Interact With This Email</h3>
-                <p>
-                    This email has been classified as potentially phishing.
-                    Do not click links, download attachments, or provide
-                    passwords, OTPs, banking information, or other sensitive
-                    information. Verify the sender through an independent,
-                    trusted channel.
-                </p>
-            </div>
-        {% else %}
-            <div class="recommendation">
-                <h3>✓ No Major Phishing Indicators Detected</h3>
-                <p>
-                    The model classified this email as legitimate. However,
-                    this does not guarantee that it is safe. Verify unexpected
-                    requests and the sender before sharing sensitive information.
-                </p>
-            </div>
-        {% endif %}
-    </section>
-
-    <footer class="footer">
-        <p>
-            <strong>🛡️ PhishGuard</strong>
-            — AI-Based Phishing Email Detector
+    <section class="heading">
+        <div class="eyebrow">Security Center</div>
+        <h1>Security Reports</h1>
+        <p class="subtitle">
+            Review your previous email scans, confidence scores and risk levels.
         </p>
-        <p>Automated Security Analysis · Scan #{{ scan_id }}</p>
-    </footer>
+    </section>
+
+    {% set total_scans = reports|length %}
+    {% set phishing_count = reports|selectattr('1', 'equalto', 'Phishing Email')|list|length %}
+    {% set legitimate_count = reports|selectattr('1', 'equalto', 'Legitimate Email')|list|length %}
+
+    <section class="summary">
+        <div class="summary-card">
+            <div class="summary-label">Total Scans</div>
+            <div class="summary-value blue">{{ total_scans }}</div>
+        </div>
+
+        <div class="summary-card">
+            <div class="summary-label">Phishing Detected</div>
+            <div class="summary-value red">{{ phishing_count }}</div>
+        </div>
+
+        <div class="summary-card">
+            <div class="summary-label">Legitimate Emails</div>
+            <div class="summary-value green">{{ legitimate_count }}</div>
+        </div>
+    </section>
+
+    <section class="panel">
+        <h2>📊 Scan Reports</h2>
+        <p class="panel-subtitle">
+            Select View Report to open the full security analysis for a scan.
+        </p>
+
+        {% if reports %}
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Scan ID</th>
+                        <th>Detection Result</th>
+                        <th>Confidence</th>
+                        <th>Risk</th>
+                        <th>Date &amp; Time</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for report in reports %}
+                    <tr>
+                        <td>#{{ report[0] }}</td>
+
+                        <td>
+                            {% if report[1] == 'Phishing Email' %}
+                                <span class="badge badge-danger">
+                                    ⚠ Phishing
+                                </span>
+                            {% else %}
+                                <span class="badge badge-success">
+                                    ✓ Legitimate
+                                </span>
+                            {% endif %}
+                        </td>
+
+                        <td>
+                            {% set conf = report[2]|default(0, true)|float %}
+                            {% set conf = [[conf, 0]|max, 100]|min %}
+
+                            <div class="confidence-wrapper">
+                                <span>{{ '%.2f'|format(conf) }}%</span>
+                                <div class="confidence-track">
+                                    <div class="confidence-bar"
+                                         style="width: {{ conf }}%;">
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+
+                        <td>
+                            {% if report[3] == 'HIGH' %}
+                                <span class="badge badge-danger">HIGH</span>
+                            {% else %}
+                                <span class="badge badge-success">
+                                    {{ report[3]|default('LOW', true) }}
+                                </span>
+                            {% endif %}
+                        </td>
+
+                        <td>{{ report[4] }}</td>
+
+                        <td>
+                            <a class="view-btn"
+                               href="{{ url_for('details', scan_id=report[0]) }}">
+                                View Report
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        {% else %}
+        <div class="empty">
+            <div class="empty-icon">📭</div>
+            <h3>No Reports Available</h3>
+            <p>
+                You haven't scanned any emails yet. Analyze an email to create
+                your first security report.
+            </p>
+            <a href="/" class="btn">Analyze an Email</a>
+        </div>
+        {% endif %}
+    </section>
 
 </main>
 
+<footer class="footer">
+    <p>
+        <strong>🛡️ PhishGuard</strong>
+        — AI-Based Phishing Email Detector
+    </p>
+    <p>Automated Email Security Analysis</p>
+</footer>
+
 </body>
 </html>
+```

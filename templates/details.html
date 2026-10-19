@@ -324,19 +324,17 @@
             height: 100%;
             border-radius: 30px;
         }
-
-        .confidence-bar {
-            width: {{ [[confidence|float, 0]|max, 100]|min }}%;
-            background: linear-gradient(90deg, #38bdf8, #3b82f6);
-            box-shadow: 0 0 14px #3b82f655;
-        }
+.confidence-bar {
+    width: {{ [[confidence|default(0)|float, 0]|max, 100]|min }}%;
+    background: linear-gradient(90deg, #38bdf8, #3b82f6);
+}
 
         .risk-track {
             background: #492530;
         }
 
         .risk-bar {
-            width: {{ [[risk_score|float, 0]|max, 100]|min }}%;
+            width: {{ [[risk_score|default(0)|float, 0]|max, 100]|min }}%;
             background: linear-gradient(90deg, #fb923c, #f43f5e);
         }
 
