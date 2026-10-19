@@ -1,81 +1,86 @@
+
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
     <meta charset="UTF-8">
-
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
-
-    <title>Settings - PhishGuard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings | PhishGuard</title>
 
     <style>
-
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
         }
 
-        body {
-            font-family: Arial, Helvetica, sans-serif;
-            background: #f4f7fb;
-            color: #1f2937;
+        :root {
+            --bg: #050b18;
+            --nav: #081225;
+            --panel: #0b162b;
+            --card: #101e35;
+            --border: #203653;
+            --text: #e5efff;
+            --muted: #91a5c2;
+            --blue: #3b82f6;
+            --green: #34d399;
+            --red: #fb5364;
         }
 
-        /* ==============================
-           NAVBAR
-        ============================== */
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        a {
+            text-decoration: none;
+        }
 
         .navbar {
-            height: 70px;
-            background: white;
-            border-bottom: 1px solid #e5e7eb;
-
+            min-height: 74px;
+            padding: 14px 5%;
+            background: var(--nav);
+            border-bottom: 1px solid var(--border);
             display: flex;
             align-items: center;
             justify-content: space-between;
-
-            padding: 0 40px;
+            gap: 20px;
+            flex-wrap: wrap;
         }
 
         .logo {
-            font-size: 24px;
-            font-weight: bold;
-            color: #111827;
+            color: white;
+            font-size: 25px;
+            font-weight: 800;
+            white-space: nowrap;
         }
 
         .logo span {
-            color: #2563eb;
+            color: #60a5fa;
         }
 
         .nav-links {
             display: flex;
             align-items: center;
-            gap: 25px;
+            gap: 5px;
+            flex-wrap: wrap;
         }
 
         .nav-links a {
-            text-decoration: none;
-            color: #4b5563;
-            font-size: 14px;
+            color: var(--muted);
+            font-size: 13px;
             font-weight: 600;
-
-            padding: 8px 10px;
+            padding: 9px 11px;
             border-radius: 8px;
-
-            transition: 0.2s;
+            transition: .2s;
         }
 
-        .nav-links a:hover {
-            background: #eff6ff;
-            color: #2563eb;
-        }
-
+        .nav-links a:hover,
         .nav-links a.active {
-            background: #eff6ff;
-            color: #2563eb;
+            background: #1d3558;
+            color: #93c5fd;
         }
 
         .user-area {
@@ -85,166 +90,215 @@
         }
 
         .user-name {
-            font-size: 14px;
+            color: #c8d8ef;
+            font-size: 13px;
             font-weight: 600;
-            color: #374151;
         }
 
         .logout {
-            text-decoration: none;
-            color: #dc2626;
-            font-size: 13px;
-            font-weight: 600;
-
+            border: 1px solid #71303d;
+            color: #fb7185;
             padding: 8px 12px;
-            border: 1px solid #fecaca;
             border-radius: 8px;
+            font-size: 12px;
+            font-weight: 700;
+            transition: .2s;
         }
 
         .logout:hover {
-            background: #fef2f2;
+            background: #361622;
         }
 
-        /* ==============================
-           PAGE
-        ============================== */
-
         .container {
-            width: 90%;
-            max-width: 1100px;
+            width: 92%;
+            max-width: 1150px;
             margin: 35px auto;
         }
 
         .page-header {
-            margin-bottom: 25px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 27px;
+        }
+
+        .eyebrow {
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 1.6px;
+            text-transform: uppercase;
+            color: #60a5fa;
         }
 
         .page-header h1 {
-            font-size: 30px;
-            color: #111827;
-            margin-bottom: 8px;
+            color: white;
+            font-size: clamp(27px, 4vw, 35px);
+            margin: 5px 0 7px;
         }
 
         .page-header p {
-            color: #6b7280;
-            font-size: 15px;
+            color: var(--muted);
+            font-size: 14px;
         }
 
-        /* ==============================
-           SETTINGS GRID
-        ============================== */
+        .secure-badge {
+            border: 1px solid #17634f;
+            background: #064e3b35;
+            color: #6ee7b7;
+            padding: 9px 13px;
+            border-radius: 30px;
+            font-size: 12px;
+            font-weight: 700;
+        }
 
         .settings-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 22px;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 20px;
         }
 
         .card {
-            background: white;
-            border: 1px solid #e5e7eb;
-            border-radius: 14px;
+            min-width: 0;
+            background: var(--panel);
+            border: 1px solid var(--border);
+            border-radius: 15px;
             padding: 25px;
+            box-shadow: 0 8px 28px #00000012;
+            transition: border-color .2s;
+        }
 
-            box-shadow:
-                0 5px 20px rgba(0, 0, 0, 0.04);
+        .card:hover {
+            border-color: #34547b;
+        }
+
+        .card-heading {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 6px;
+        }
+
+        .heading-icon {
+            width: 43px;
+            height: 43px;
+            flex-shrink: 0;
+            display: grid;
+            place-items: center;
+            border-radius: 12px;
+            background: #19345a;
+            font-size: 20px;
         }
 
         .card h2 {
-            font-size: 19px;
-            color: #111827;
-            margin-bottom: 7px;
+            font-size: 18px;
+            color: #f1f6ff;
         }
 
         .card-description {
-            color: #6b7280;
-            font-size: 13px;
-            margin-bottom: 22px;
+            color: var(--muted);
+            font-size: 12px;
+            margin: 0 0 23px;
         }
-
-        /* ==============================
-           PROFILE
-        ============================== */
 
         .profile-box {
             display: flex;
             align-items: center;
-            gap: 18px;
-            margin-bottom: 25px;
+            gap: 16px;
+            padding: 18px;
+            margin-bottom: 20px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #13294a, #101e35);
+            border: 1px solid #294363;
+            min-width: 0;
         }
 
         .profile-icon {
-            width: 65px;
-            height: 65px;
-
+            width: 62px;
+            height: 62px;
+            flex-shrink: 0;
             border-radius: 50%;
+            display: grid;
+            place-items: center;
+            background: linear-gradient(135deg, #2563eb, #60a5fa);
+            color: white;
+            font-size: 25px;
+            font-weight: 800;
+            box-shadow: 0 4px 16px #2563eb35;
+        }
 
-            background: #dbeafe;
-            color: #2563eb;
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            font-size: 27px;
-            font-weight: bold;
+        .profile-info {
+            min-width: 0;
         }
 
         .profile-info h3 {
-            font-size: 18px;
-            color: #111827;
-            margin-bottom: 5px;
+            color: white;
+            font-size: 17px;
+            overflow-wrap: anywhere;
         }
 
         .profile-info p {
-            font-size: 13px;
-            color: #6b7280;
+            color: var(--muted);
+            font-size: 12px;
+            overflow-wrap: anywhere;
         }
 
-        /* ==============================
-           INFORMATION
-        ============================== */
-
-        .info-row {
+        .info-row,
+        .app-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
-
-            padding: 15px 0;
-
-            border-bottom: 1px solid #f0f0f0;
+            gap: 15px;
+            padding: 14px 0;
+            border-bottom: 1px solid #1b2b43;
         }
 
-        .info-row:last-child {
+        .info-row:last-child,
+        .app-item:last-child {
             border-bottom: none;
         }
 
-        .info-label {
-            color: #6b7280;
+        .info-label,
+        .app-label {
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .info-value,
+        .app-value {
+            color: #e5efff;
             font-size: 13px;
+            font-weight: 700;
+            text-align: right;
+            overflow-wrap: anywhere;
         }
 
-        .info-value {
-            color: #111827;
-            font-size: 14px;
-            font-weight: 600;
+        .status {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 30px;
+            font-size: 11px;
+            font-weight: 800;
+            white-space: nowrap;
         }
 
-        /* ==============================
-           SECURITY
-        ============================== */
+        .status.active {
+            background: #064e3b55;
+            border: 1px solid #147d5b;
+            color: #6ee7b7;
+        }
 
         .security-item {
             display: flex;
-            align-items: center;
             justify-content: space-between;
-
-            padding: 16px 0;
-
-            border-bottom: 1px solid #f0f0f0;
+            align-items: center;
+            gap: 12px;
+            padding: 15px 0;
+            border-bottom: 1px solid #1b2b43;
         }
 
-        .security-item:last-child {
+        .security-item:last-of-type {
             border-bottom: none;
         }
 
@@ -252,64 +306,47 @@
             display: flex;
             align-items: center;
             gap: 12px;
+            min-width: 0;
         }
 
         .security-icon {
-            width: 40px;
-            height: 40px;
-
+            width: 39px;
+            height: 39px;
+            flex-shrink: 0;
             border-radius: 10px;
-
-            background: #eff6ff;
-            color: #2563eb;
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            font-size: 18px;
+            display: grid;
+            place-items: center;
+            background: #19345a;
+            font-size: 17px;
         }
 
         .security-text h4 {
-            font-size: 14px;
-            color: #111827;
-            margin-bottom: 4px;
+            color: #e5efff;
+            font-size: 13px;
+            margin-bottom: 3px;
         }
 
         .security-text p {
-            font-size: 12px;
-            color: #6b7280;
+            color: var(--muted);
+            font-size: 11px;
         }
-
-        .status {
-            font-size: 12px;
-            font-weight: bold;
-
-            padding: 6px 10px;
-
-            border-radius: 20px;
-        }
-
-        .status.active {
-            background: #dcfce7;
-            color: #15803d;
-        }
-
-        /* ==============================
-           CHANGE PASSWORD
-        ============================== */
 
         .password-form {
-            margin-top: 25px;
+            margin-top: 23px;
             padding-top: 22px;
-
-            border-top: 1px solid #e5e7eb;
+            border-top: 1px solid var(--border);
         }
 
         .password-form h3 {
             font-size: 16px;
-            color: #111827;
-            margin-bottom: 18px;
+            margin-bottom: 7px;
+            color: white;
+        }
+
+        .password-note {
+            color: var(--muted);
+            font-size: 12px;
+            margin-bottom: 19px;
         }
 
         .form-group {
@@ -318,175 +355,128 @@
 
         .form-group label {
             display: block;
-
-            font-size: 13px;
-            font-weight: 600;
-
-            color: #374151;
-
+            color: #c7d7ee;
+            font-size: 12px;
+            font-weight: 700;
             margin-bottom: 7px;
         }
 
+        .input-wrap {
+            position: relative;
+        }
+
         .form-group input {
+            display: block;
             width: 100%;
-
-            padding: 11px 12px;
-
-            border: 1px solid #d1d5db;
-            border-radius: 8px;
-
-            font-size: 13px;
-
+            padding: 12px 45px 12px 13px;
+            background: #071326;
+            color: #e5efff;
+            border: 1px solid #294363;
+            border-radius: 9px;
             outline: none;
+            font-size: 13px;
+            transition: .2s;
+        }
 
-            background: white;
+        .form-group input::placeholder {
+            color: #607693;
         }
 
         .form-group input:focus {
-            border-color: #2563eb;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px #3b82f620;
+        }
 
-            box-shadow:
-                0 0 0 2px rgba(37, 99, 235, 0.08);
+        .toggle-password {
+            position: absolute;
+            top: 50%;
+            right: 10px;
+            transform: translateY(-50%);
+            border: none;
+            background: transparent;
+            color: #91a5c2;
+            cursor: pointer;
+            padding: 5px;
+            font-size: 12px;
+        }
+
+        .toggle-password:hover {
+            color: #93c5fd;
         }
 
         .change-button {
             width: 100%;
-
-            border: none;
-
-            background: #2563eb;
+            padding: 12px 16px;
+            border: 1px solid #3b82f6;
+            border-radius: 9px;
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
             color: white;
-
-            padding: 11px 17px;
-
-            border-radius: 8px;
-
             font-size: 13px;
-            font-weight: 600;
-
+            font-weight: 800;
             cursor: pointer;
+            transition: .2s;
         }
 
         .change-button:hover {
-            background: #1d4ed8;
+            filter: brightness(1.12);
+            box-shadow: 0 5px 18px #2563eb30;
         }
-
-        /* ==============================
-           APPLICATION
-        ============================== */
-
-        .app-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-
-            padding: 15px 0;
-
-            border-bottom: 1px solid #f0f0f0;
-        }
-
-        .app-item:last-child {
-            border-bottom: none;
-        }
-
-        .app-label {
-            color: #6b7280;
-            font-size: 13px;
-        }
-
-        .app-value {
-            color: #111827;
-            font-size: 14px;
-            font-weight: 600;
-
-            text-align: right;
-        }
-
-        /* ==============================
-           BUTTONS
-        ============================== */
 
         .button-area {
-            margin-top: 22px;
-
-            display: flex;
-
-            gap: 12px;
-
-            flex-wrap: wrap;
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 11px;
+            margin-top: 20px;
         }
 
         .button {
-            display: inline-block;
-
-            text-decoration: none;
-
-            padding: 11px 17px;
-
-            border-radius: 8px;
-
-            font-size: 13px;
-            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            min-height: 43px;
+            padding: 10px 12px;
+            border: 1px solid #294363;
+            border-radius: 9px;
+            color: #dceaff;
+            background: #12223c;
+            font-size: 12px;
+            font-weight: 700;
+            text-align: center;
+            transition: .2s;
         }
 
-        .primary-button {
-            background: #2563eb;
-            color: white;
+        .button:hover {
+            border-color: #3b82f6;
+            background: #19345a;
         }
 
-        .primary-button:hover {
-            background: #1d4ed8;
+        .button.danger {
+            color: #fb7185;
+            border-color: #71303d;
+            background: #271520;
         }
 
-        .danger-button {
-            background: #fef2f2;
-            color: #dc2626;
-
-            border: 1px solid #fecaca;
+        .button.danger:hover {
+            background: #361622;
         }
-
-        .danger-button:hover {
-            background: #fee2e2;
-        }
-
-        /* ==============================
-           FOOTER
-        ============================== */
 
         .footer {
+            margin-top: 35px;
+            padding: 24px 10px;
+            border-top: 1px solid var(--border);
+            color: var(--muted);
             text-align: center;
-
-            margin-top: 40px;
-
-            padding: 25px 0;
-
-            border-top: 1px solid #e5e7eb;
-
-            color: #6b7280;
-
-            font-size: 13px;
+            font-size: 12px;
         }
 
         .footer strong {
-            color: #374151;
+            color: #60a5fa;
         }
 
-        /* ==============================
-           RESPONSIVE
-        ============================== */
-
-        @media (max-width: 900px) {
-
+        @media (max-width: 950px) {
             .navbar {
-                padding: 0 20px;
-            }
-
-            .nav-links {
-                gap: 8px;
-            }
-
-            .nav-links a {
-                font-size: 12px;
+                justify-content: center;
             }
 
             .settings-grid {
@@ -495,21 +485,23 @@
         }
 
         @media (max-width: 650px) {
-
             .navbar {
-                height: auto;
+                padding: 17px 4%;
+                gap: 13px;
+            }
 
-                padding: 15px;
-
-                flex-direction: column;
-
-                gap: 15px;
+            .logo {
+                width: 100%;
+                text-align: center;
             }
 
             .nav-links {
-                flex-wrap: wrap;
-
                 justify-content: center;
+            }
+
+            .nav-links a {
+                font-size: 12px;
+                padding: 8px;
             }
 
             .user-area {
@@ -518,552 +510,315 @@
 
             .container {
                 width: 94%;
+                margin: 24px auto;
+            }
 
-                margin: 25px auto;
+            .card {
+                padding: 19px;
             }
 
             .page-header h1 {
-                font-size: 25px;
+                font-size: 28px;
             }
 
+            .button-area {
+                grid-template-columns: 1fr;
+            }
+
+            .info-row,
             .app-item {
-                gap: 15px;
+                align-items: flex-start;
             }
 
+            .info-value,
             .app-value {
-                font-size: 12px;
+                max-width: 58%;
             }
         }
 
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                transition: none !important;
+            }
+        }
     </style>
-
 </head>
-
 
 <body>
 
-
-<!-- ==============================
-     NAVBAR
-============================== -->
-
 <nav class="navbar">
-
-    <div class="logo">
-        🛡️ <span>PhishGuard</span>
-    </div>
-
+    <a href="/" class="logo">🛡️ Phish<span>Guard</span></a>
 
     <div class="nav-links">
-
-        <a href="/">
-            🏠 Detector
-        </a>
-
-        <a href="/history">
-            📋 History
-        </a>
-
-        <a href="/dashboard">
-            📊 Dashboard
-        </a>
-
-        <a href="/reports">
-            📄 Reports
-        </a>
-
-        <a href="/settings" class="active">
-            ⚙️ Settings
-        </a>
-
+        <a href="/">🏠 Detector</a>
+        <a href="/history">📋 History</a>
+        <a href="/dashboard">📊 Dashboard</a>
+        <a href="/reports">📄 Reports</a>
+        <a href="/settings" class="active">⚙️ Settings</a>
     </div>
 
-
     <div class="user-area">
-
         <span class="user-name">
             👤 {{ session.get("user_name", "User") }}
         </span>
-
-        <a href="/logout" class="logout">
-            Logout
-        </a>
-
+        <a href="/logout" class="logout">Logout ↗</a>
     </div>
-
 </nav>
 
+<main class="container">
 
-<!-- ==============================
-     MAIN CONTENT
-============================== -->
-
-<div class="container">
-
-
-    <div class="page-header">
-
-        <h1>
-            ⚙️ Settings
-        </h1>
-
-        <p>
-            Manage your PhishGuard account and application information.
-        </p>
-
-    </div>
-
+    <header class="page-header">
+        <div>
+            <div class="eyebrow">Account Center</div>
+            <h1>⚙️ Settings</h1>
+            <p>Manage your profile, account security and application details.</p>
+        </div>
+        <div class="secure-badge">🛡️ Account Settings</div>
+    </header>
 
     <div class="settings-grid">
 
-
-        <!-- ==============================
-             PROFILE
-        ============================== -->
-
-        <div class="card">
-
-            <h2>
-                👤 Profile
-            </h2>
-
-            <p class="card-description">
-                Your account information
-            </p>
-
+        <!-- PROFILE -->
+        <section class="card">
+            <div class="card-heading">
+                <div class="heading-icon">👤</div>
+                <h2>Profile Information</h2>
+            </div>
+            <p class="card-description">Your registered account details</p>
 
             <div class="profile-box">
-
                 <div class="profile-icon">
-
                     {{ session.get("user_name", "U")[0].upper() }}
-
                 </div>
-
-
                 <div class="profile-info">
-
-                    <h3>
-                        {{ session.get("user_name", "User") }}
-                    </h3>
-
-                    <p>
-                        {{ session.get(
-                            "user_email",
-                            "Email not available"
-                        ) }}
-                    </p>
-
+                    <h3>{{ session.get("user_name", "User") }}</h3>
+                    <p>{{ session.get("user_email", "Email not available") }}</p>
                 </div>
-
             </div>
-
 
             <div class="info-row">
-
-                <span class="info-label">
-                    Name
-                </span>
-
-                <span class="info-value">
-                    {{ session.get(
-                        "user_name",
-                        "User"
-                    ) }}
-                </span>
-
+                <span class="info-label">Full Name</span>
+                <span class="info-value">{{ session.get("user_name", "User") }}</span>
             </div>
-
 
             <div class="info-row">
-
-                <span class="info-label">
-                    Email
-                </span>
-
-                <span class="info-value">
-                    {{ session.get(
-                        "user_email",
-                        "Not available"
-                    ) }}
-                </span>
-
+                <span class="info-label">Email Address</span>
+                <span class="info-value">{{ session.get("user_email", "Not available") }}</span>
             </div>
-
 
             <div class="info-row">
-
-                <span class="info-label">
-                    Account Status
-                </span>
-
-                <span class="status active">
-                    Active
-                </span>
-
+                <span class="info-label">Account Status</span>
+                <span class="status active">● Active</span>
             </div>
 
-        </div>
+            <div class="info-row">
+                <span class="info-label">Authentication</span>
+                <span class="info-value">Login Required</span>
+            </div>
+        </section>
 
-
-        <!-- ==============================
-             SECURITY
-        ============================== -->
-
-        <div class="card">
-
-            <h2>
-                🔐 Security
-            </h2>
-
-            <p class="card-description">
-                Security information for your account
-            </p>
-
+        <!-- SECURITY -->
+        <section class="card">
+            <div class="card-heading">
+                <div class="heading-icon">🔐</div>
+                <h2>Account Security</h2>
+            </div>
+            <p class="card-description">Keep your account credentials secure</p>
 
             <div class="security-item">
-
                 <div class="security-left">
-
-                    <div class="security-icon">
-                        🔒
-                    </div>
-
-
+                    <div class="security-icon">🔒</div>
                     <div class="security-text">
-
-                        <h4>
-                            Password Protection
-                        </h4>
-
-                        <p>
-                            Your password is securely hashed.
-                        </p>
-
+                        <h4>Password Protection</h4>
+                        <p>Passwords are stored as hashes.</p>
                     </div>
-
                 </div>
-
-
-                <span class="status active">
-                    Protected
-                </span>
-
+                <span class="status active">Protected</span>
             </div>
-
 
             <div class="security-item">
-
                 <div class="security-left">
-
-                    <div class="security-icon">
-                        🛡️
-                    </div>
-
-
+                    <div class="security-icon">🛡️</div>
                     <div class="security-text">
-
-                        <h4>
-                            Login Session
-                        </h4>
-
-                        <p>
-                            Your current session is active.
-                        </p>
-
+                        <h4>Login Session</h4>
+                        <p>Your current session is active.</p>
                     </div>
-
                 </div>
-
-
-                <span class="status active">
-                    Active
-                </span>
-
+                <span class="status active">Active</span>
             </div>
-
 
             <div class="security-item">
-
                 <div class="security-left">
-
-                    <div class="security-icon">
-                        🔑
-                    </div>
-
-
+                    <div class="security-icon">🔑</div>
                     <div class="security-text">
-
-                        <h4>
-                            Authentication
-                        </h4>
-
-                        <p>
-                            Login is required to access scans.
-                        </p>
-
+                        <h4>Account Access</h4>
+                        <p>Authentication protects your pages.</p>
                     </div>
-
                 </div>
-
-
-                <span class="status active">
-                    Enabled
-                </span>
-
+                <span class="status active">Enabled</span>
             </div>
 
-
-            <!-- CHANGE PASSWORD -->
-
-            <form
-                action="/change-password"
-                method="POST"
-                class="password-form"
-            >
-
-                <h3>
-                    🔑 Change Password
-                </h3>
-
+            <form action="/change-password" method="POST"
+                  class="password-form" id="passwordForm">
+                <h3>🔑 Change Password</h3>
+                <p class="password-note">
+                    Choose a strong password you have not used elsewhere.
+                </p>
 
                 <div class="form-group">
-
-                    <label for="current_password">
-                        Current Password
-                    </label>
-
-                    <input
-                        type="password"
-                        id="current_password"
-                        name="current_password"
-                        placeholder="Enter current password"
-                        required
-                    >
-
+                    <label for="current_password">Current Password</label>
+                    <div class="input-wrap">
+                        <input type="password" id="current_password"
+                               name="current_password"
+                               placeholder="Enter current password"
+                               autocomplete="current-password" required>
+                        <button class="toggle-password" type="button"
+                                data-target="current_password"
+                                aria-label="Show current password">Show</button>
+                    </div>
                 </div>
-
 
                 <div class="form-group">
-
-                    <label for="new_password">
-                        New Password
-                    </label>
-
-                    <input
-                        type="password"
-                        id="new_password"
-                        name="new_password"
-                        placeholder="Enter new password"
-                        minlength="6"
-                        required
-                    >
-
+                    <label for="new_password">New Password</label>
+                    <div class="input-wrap">
+                        <input type="password" id="new_password"
+                               name="new_password"
+                               placeholder="Enter new password"
+                               minlength="6" autocomplete="new-password" required>
+                        <button class="toggle-password" type="button"
+                                data-target="new_password"
+                                aria-label="Show new password">Show</button>
+                    </div>
                 </div>
-
 
                 <div class="form-group">
-
-                    <label for="confirm_password">
-                        Confirm New Password
-                    </label>
-
-                    <input
-                        type="password"
-                        id="confirm_password"
-                        name="confirm_password"
-                        placeholder="Confirm new password"
-                        minlength="6"
-                        required
-                    >
-
+                    <label for="confirm_password">Confirm New Password</label>
+                    <div class="input-wrap">
+                        <input type="password" id="confirm_password"
+                               name="confirm_password"
+                               placeholder="Re-enter new password"
+                               minlength="6" autocomplete="new-password" required>
+                        <button class="toggle-password" type="button"
+                                data-target="confirm_password"
+                                aria-label="Show confirmed password">Show</button>
+                    </div>
                 </div>
 
+                <p id="passwordMessage" role="status"
+                   style="display:none;font-size:12px;margin-bottom:12px;"></p>
 
-                <button
-                    type="submit"
-                    class="change-button"
-                >
-                    🔐 Change Password
+                <button type="submit" class="change-button">
+                    🔐 Update Password
                 </button>
-
             </form>
+        </section>
 
-        </div>
-
-
-        <!-- ==============================
-             APPLICATION
-        ============================== -->
-
-        <div class="card">
-
-            <h2>
-                🖥️ Application
-            </h2>
-
-            <p class="card-description">
-                PhishGuard application information
-            </p>
-
+        <!-- APPLICATION -->
+        <section class="card">
+            <div class="card-heading">
+                <div class="heading-icon">🖥️</div>
+                <h2>Application Details</h2>
+            </div>
+            <p class="card-description">Technology used by PhishGuard</p>
 
             <div class="app-item">
-
-                <span class="app-label">
-                    Application Name
-                </span>
-
-                <span class="app-value">
-                    PhishGuard
-                </span>
-
+                <span class="app-label">Application</span>
+                <span class="app-value">PhishGuard</span>
             </div>
-
-
             <div class="app-item">
-
-                <span class="app-label">
-                    Application Type
-                </span>
-
-                <span class="app-value">
-                    AI-Based Security System
-                </span>
-
+                <span class="app-label">Purpose</span>
+                <span class="app-value">Phishing Email Detection</span>
             </div>
-
-
             <div class="app-item">
-
-                <span class="app-label">
-                    Detection Technology
-                </span>
-
-                <span class="app-value">
-                    Machine Learning
-                </span>
-
+                <span class="app-label">Framework</span>
+                <span class="app-value">Python Flask</span>
             </div>
-
-
             <div class="app-item">
-
-                <span class="app-label">
-                    ML Model
-                </span>
-
-                <span class="app-value">
-                    TF-IDF + Logistic Regression
-                </span>
-
+                <span class="app-label">ML Technology</span>
+                <span class="app-value">Machine Learning</span>
             </div>
-
-
             <div class="app-item">
-
-                <span class="app-label">
-                    Database
-                </span>
-
-                <span class="app-value">
-                    SQLite
-                </span>
-
+                <span class="app-label">Model</span>
+                <span class="app-value">TF-IDF + Classifier</span>
             </div>
-
-
             <div class="app-item">
-
-                <span class="app-label">
-                    Framework
-                </span>
-
-                <span class="app-value">
-                    Flask
-                </span>
-
+                <span class="app-label">Database</span>
+                <span class="app-value">Configured Database</span>
             </div>
+            <div class="app-item">
+                <span class="app-label">Interface</span>
+                <span class="app-value">Dark Theme</span>
+            </div>
+        </section>
 
-        </div>
-
-
-        <!-- ==============================
-             QUICK ACTIONS
-        ============================== -->
-
-        <div class="card">
-
-            <h2>
-                ⚡ Quick Actions
-            </h2>
-
-            <p class="card-description">
-                Quickly access important PhishGuard features.
-            </p>
-
+        <!-- QUICK ACTIONS -->
+        <section class="card">
+            <div class="card-heading">
+                <div class="heading-icon">⚡</div>
+                <h2>Quick Actions</h2>
+            </div>
+            <p class="card-description">Navigate to important features</p>
 
             <div class="button-area">
-
-                <a
-                    href="/"
-                    class="button primary-button"
-                >
-                    🔍 Scan New Email
-                </a>
-
-
-                <a
-                    href="/history"
-                    class="button primary-button"
-                >
-                    📋 View History
-                </a>
-
-
-                <a
-                    href="/reports"
-                    class="button primary-button"
-                >
-                    📄 View Reports
-                </a>
-
-
-                <a
-                    href="/logout"
-                    class="button danger-button"
-                >
-                    🚪 Logout
-                </a>
-
+                <a href="/" class="button">🔍 Scan New Email →</a>
+                <a href="/history" class="button">📋 Scan History →</a>
+                <a href="/dashboard" class="button">📊 Dashboard →</a>
+                <a href="/reports" class="button">📄 View Reports →</a>
+                <a href="/logout" class="button danger">🚪 Logout →</a>
             </div>
-
-        </div>
-
+        </section>
 
     </div>
 
+    <footer class="footer">
+        <p><strong>🛡️ PhishGuard</strong> — AI-Based Phishing Email Detector</p>
+        <p>Secure · Smart · AI-Powered</p>
+    </footer>
 
-    <!-- ==============================
-         FOOTER
-    ============================== -->
+</main>
 
-    <div class="footer">
+<script>
+    document.querySelectorAll(".toggle-password").forEach(function (button) {
+        button.addEventListener("click", function () {
+            const input = document.getElementById(button.dataset.target);
+            const show = input.type === "password";
+            input.type = show ? "text" : "password";
+            button.textContent = show ? "Hide" : "Show";
+            button.setAttribute(
+                "aria-label",
+                (show ? "Hide " : "Show ") + input.id.replaceAll("_", " ")
+            );
+        });
+    });
 
-        <p>
-            <strong>PhishGuard</strong>
-            — AI-Based Phishing Email Detector
-        </p>
+    const passwordForm = document.getElementById("passwordForm");
+    const newPassword = document.getElementById("new_password");
+    const confirmPassword = document.getElementById("confirm_password");
+    const passwordMessage = document.getElementById("passwordMessage");
 
-        <p>
-            Secure • Smart • AI-Powered
-        </p>
+    passwordForm.addEventListener("submit", function (event) {
+        passwordMessage.style.display = "block";
 
-    </div>
+        if (newPassword.value !== confirmPassword.value) {
+            event.preventDefault();
+            passwordMessage.textContent = "New password and confirmation do not match.";
+            passwordMessage.style.color = "#fb7185";
+            confirmPassword.focus();
+            return;
+        }
 
+        if (newPassword.value.length < 6) {
+            event.preventDefault();
+            passwordMessage.textContent = "New password must contain at least 6 characters.";
+            passwordMessage.style.color = "#fb7185";
+            newPassword.focus();
+            return;
+        }
 
-</div>
-
+        passwordMessage.textContent = "Submitting password update…";
+        passwordMessage.style.color = "#6ee7b7";
+    });
+</script>
 
 </body>
-
 </html>

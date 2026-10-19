@@ -1,92 +1,70 @@
-```html
+
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>PhishGuard | Create Account</title>
+    <title>Create Account | PhishGuard</title>
 
     <style>
-
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            font-family: Arial, sans-serif;
         }
 
         body {
             min-height: 100vh;
-            font-family: Arial, Helvetica, sans-serif;
-            background: #f4f7fb;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 20px;
+            background: #080f1e;
+            color: #f1f5f9;
+            padding: 25px 15px;
         }
 
         .register-container {
             width: 100%;
             max-width: 440px;
-        }
-
-        .logo-section {
-            text-align: center;
-            margin-bottom: 25px;
-        }
-
-        .logo-icon {
-            font-size: 48px;
-            margin-bottom: 10px;
+            padding: 32px;
+            background: #111c30;
+            border: 1px solid #263750;
+            border-radius: 18px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
         }
 
         .logo {
-            font-size: 26px;
-            font-weight: 700;
-            color: #2563eb;
+            text-align: center;
+            margin-bottom: 27px;
         }
 
-        .logo span {
-            color: #0f172a;
+        .logo-icon {
+            width: 62px;
+            height: 62px;
+            margin: 0 auto 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 17px;
+            background: #163b50;
+            color: #38bdf8;
+            font-size: 30px;
         }
 
-        .subtitle {
-            margin-top: 8px;
-            color: #64748b;
+        .logo h1 {
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .logo h1 span {
+            color: #38bdf8;
+        }
+
+        .logo p {
+            color: #94a3b8;
             font-size: 14px;
-        }
-
-        .register-card {
-            background: white;
-            border: 1px solid #e2e8f0;
-            border-radius: 16px;
-            padding: 32px;
-            box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
-        }
-
-        .register-card h2 {
-            color: #0f172a;
-            font-size: 22px;
-            margin-bottom: 7px;
-        }
-
-        .description {
-            color: #64748b;
-            font-size: 13px;
-            margin-bottom: 25px;
             line-height: 1.5;
-        }
-
-        .error-message {
-            background: #fef2f2;
-            border: 1px solid #fecaca;
-            color: #b91c1c;
-            padding: 11px 13px;
-            border-radius: 8px;
-            font-size: 13px;
-            margin-bottom: 18px;
         }
 
         .form-group {
@@ -95,56 +73,110 @@
 
         label {
             display: block;
-            color: #334155;
-            font-size: 13px;
-            font-weight: 600;
-            margin-bottom: 7px;
+            margin-bottom: 8px;
+            font-size: 14px;
+            font-weight: bold;
+            color: #dbeafe;
         }
 
         input {
             width: 100%;
-            padding: 12px 13px;
-            border: 1px solid #cbd5e1;
-            border-radius: 8px;
+            padding: 13px 14px;
+            background: #0b1425;
+            border: 1px solid #334155;
+            border-radius: 9px;
             outline: none;
-            font-size: 14px;
-            color: #1e293b;
+            color: #f8fafc;
+            font-size: 15px;
+            transition: 0.2s;
         }
 
         input:focus {
-            border-color: #2563eb;
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.08);
+            border-color: #38bdf8;
+            box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.12);
+        }
+
+        input::placeholder {
+            color: #64748b;
+        }
+
+        .password-box {
+            position: relative;
+        }
+
+        .password-box input {
+            padding-right: 65px;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #38bdf8;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .password-hint {
+            margin-top: 7px;
+            color: #64748b;
+            font-size: 12px;
+        }
+
+        .error-message {
+            background: rgba(239, 68, 68, 0.12);
+            border: 1px solid rgba(239, 68, 68, 0.4);
+            color: #fca5a5;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 14px;
+            margin-bottom: 18px;
+        }
+
+        .success-message {
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid rgba(34, 197, 94, 0.35);
+            color: #86efac;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 14px;
+            margin-bottom: 18px;
         }
 
         .register-button {
             width: 100%;
-            padding: 13px;
-            margin-top: 5px;
+            padding: 14px;
+            margin-top: 4px;
             border: none;
-            border-radius: 8px;
-            background: #2563eb;
-            color: white;
-            font-size: 14px;
-            font-weight: 700;
+            border-radius: 9px;
+            background: #0ea5e9;
+            color: #ffffff;
+            font-size: 16px;
+            font-weight: bold;
             cursor: pointer;
             transition: 0.2s;
         }
 
         .register-button:hover {
-            background: #1d4ed8;
+            background: #0284c7;
+            transform: translateY(-1px);
         }
 
         .login-link {
             text-align: center;
-            margin-top: 22px;
-            font-size: 13px;
-            color: #64748b;
+            margin-top: 23px;
+            color: #94a3b8;
+            font-size: 14px;
         }
 
         .login-link a {
-            color: #2563eb;
+            color: #38bdf8;
+            font-weight: bold;
             text-decoration: none;
-            font-weight: 600;
         }
 
         .login-link a:hover {
@@ -152,180 +184,161 @@
         }
 
         .security-note {
+            margin-top: 24px;
+            padding-top: 17px;
+            border-top: 1px solid #263750;
             text-align: center;
-            margin-top: 20px;
-            color: #94a3b8;
-            font-size: 11px;
-            line-height: 1.5;
+            color: #64748b;
+            font-size: 12px;
+            line-height: 1.6;
         }
 
-        @media (max-width: 500px) {
-
-            .register-card {
-                padding: 24px;
+        @media (max-width: 480px) {
+            .register-container {
+                padding: 25px 20px;
             }
 
-            .logo {
-                font-size: 23px;
+            .logo h1 {
+                font-size: 25px;
             }
-
         }
-
     </style>
-
 </head>
-
 
 <body>
 
     <div class="register-container">
 
-
-        <div class="logo-section">
-
-            <div class="logo-icon">
-                🛡️
-            </div>
-
-            <div class="logo">
-                Phish<span>Guard</span>
-            </div>
-
-            <div class="subtitle">
-                AI-Based Phishing Email Detection
-            </div>
-
+        <div class="logo">
+            <div class="logo-icon">🛡️</div>
+            <h1>Phish<span>Guard</span></h1>
+            <p>Create your account and protect your inbox</p>
         </div>
 
+        {% if error %}
+            <div class="error-message">{{ error }}</div>
+        {% endif %}
 
-        <div class="register-card">
+        {% if message %}
+            <div class="success-message">{{ message }}</div>
+        {% endif %}
 
-            <h2>
-                Create Account
-            </h2>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% for category, msg in messages %}
+                <div class="{{ 'success-message' if category == 'success' else 'error-message' }}">
+                    {{ msg }}
+                </div>
+            {% endfor %}
+        {% endwith %}
 
-            <p class="description">
-                Create your PhishGuard account to access
-                the email security dashboard.
-            </p>
+        <form method="POST" action="{{ url_for('register') }}">
 
-
-            {% if error %}
-
-            <div class="error-message">
-                ⚠️ {{ error }}
+            <div class="form-group">
+                <label for="name">Full Name</label>
+                <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    placeholder="Enter your full name"
+                    autocomplete="name"
+                    required
+                >
             </div>
 
-            {% endif %}
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    placeholder="Enter your email address"
+                    autocomplete="email"
+                    required
+                >
+            </div>
 
-
-            <form method="POST">
-
-
-                <div class="form-group">
-
-                    <label for="name">
-                        Full Name
-                    </label>
-
-                    <input
-                        type="text"
-                        id="name"
-                        name="name"
-                        placeholder="Enter your full name"
-                        required
-                    >
-
-                </div>
-
-
-                <div class="form-group">
-
-                    <label for="email">
-                        Email Address
-                    </label>
-
-                    <input
-                        type="email"
-                        id="email"
-                        name="email"
-                        placeholder="Enter your email"
-                        required
-                    >
-
-                </div>
-
-
-                <div class="form-group">
-
-                    <label for="password">
-                        Password
-                    </label>
-
+            <div class="form-group">
+                <label for="password">Password</label>
+                <div class="password-box">
                     <input
                         type="password"
                         id="password"
                         name="password"
-                        placeholder="Minimum 6 characters"
+                        placeholder="Create a password"
+                        autocomplete="new-password"
                         minlength="6"
                         required
                     >
-
+                    <button
+                        type="button"
+                        class="toggle-password"
+                        onclick="togglePassword('password', this)"
+                    >SHOW</button>
                 </div>
+                <p class="password-hint">Use at least 6 characters.</p>
+            </div>
 
-
-                <div class="form-group">
-
-                    <label for="confirm_password">
-                        Confirm Password
-                    </label>
-
+            <div class="form-group">
+                <label for="confirm_password">Confirm Password</label>
+                <div class="password-box">
                     <input
                         type="password"
                         id="confirm_password"
                         name="confirm_password"
                         placeholder="Re-enter your password"
+                        autocomplete="new-password"
                         minlength="6"
                         required
                     >
-
+                    <button
+                        type="button"
+                        class="toggle-password"
+                        onclick="togglePassword('confirm_password', this)"
+                    >SHOW</button>
                 </div>
-
-
-                <button
-                    type="submit"
-                    class="register-button"
-                >
-                    🛡️ Create Account
-                </button>
-
-
-            </form>
-
-
-            <div class="login-link">
-
-                Already have an account?
-
-                <a href="/login">
-                    Login
-                </a>
-
             </div>
 
-        </div>
+            <button type="submit" class="register-button">
+                Create Account →
+            </button>
 
+        </form>
+
+        <div class="login-link">
+            Already have an account?
+            <a href="{{ url_for('login') }}">Login</a>
+        </div>
 
         <div class="security-note">
-
-            🔒 Passwords are securely hashed before being stored.
-
+            🛡️ PhishGuard Security<br>
+            Your first step towards safer emails
         </div>
-
 
     </div>
 
-</body>
+    <script>
+        function togglePassword(id, button) {
+            const password = document.getElementById(id);
 
+            if (password.type === "password") {
+                password.type = "text";
+                button.textContent = "HIDE";
+            } else {
+                password.type = "password";
+                button.textContent = "SHOW";
+            }
+        }
+
+        document.querySelector("form").addEventListener("submit", function(event) {
+            const password = document.getElementById("password").value;
+            const confirmPassword = document.getElementById("confirm_password").value;
+
+            if (password !== confirmPassword) {
+                event.preventDefault();
+                alert("Passwords do not match. Please try again.");
+            }
+        });
+    </script>
+
+</body>
 </html>
-```
